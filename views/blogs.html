@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+    <title>Stog - Blogs</title>
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+    crossorigin="anonymous">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-dark"
+    data-bs-theme="dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                Stog
+            </a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menuPrincipal"
+                aria-controls="menuPrincipal"
+                aria-expanded="false"
+                aria-label="Mostrar navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">
+                            Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.html">
+                            Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="nosotros.html">
+                            Nosotros
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="blogs.html">
+                            Blogs
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ofertas.html">
+                            Ofertas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacto.html">
+                            Contacto
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            Iniciar sesión
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="registro.html">
+                            Registro
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            🛒 Carrito (0)
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-success text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">
+                Noticias importantes
+            </h1>
+            <p class="lead">
+                Datos curiosos del mundo de los videojuegos.
+            </p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+
+        <div class="card mb-4 shadow-sm">
+            <div class="row g-0">
+                <div class="col-12 col-md-4">
+                    <div class="ratio ratio-4x3">
+                        <img src="../imagenes/doom.webp" class="object-fit-cover" alt="Caso curioso 1">
+                    </div>
+                </div>
+                <div class="col-12 col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Caso curioso #1
+                        </h5>
+                        <p class="card-text">
+                            Doom, lanzado en 1993, es considerado uno de los juegos que
+                            definió el género shooter en primera persona y popularizó el
+                            juego en red entre computadores.
+                        </p>
+                        <a href="blog-caso1.html" class="btn btn-success">
+                            Ver caso
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4 shadow-sm">
+            <div class="row g-0">
+                <div class="col-12 col-md-4">
+                    <div class="ratio ratio-4x3">
+                        <img src="../imagenes/gta.webp" class="object-fit-cover" alt="Caso curioso 2">
+                    </div>
+                </div>
+                <div class="col-12 col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Caso curioso #2
+                        </h5>
+                        <p class="card-text">
+                            La saga GTA ha vendido más de 405 millones de copias en total,
+                            convirtiéndola en una de las franquicias de videojuegos más
+                            exitosas de la historia.
+                        </p>
+                        <a href="blog-caso2.html" class="btn btn-success">
+                            Ver caso
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-dark text-white text-center py-4">
+        <p class="mb-0">Stog 2026</p>
+    </footer>
+
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous">
+</script>
+
+<script src="../js/router.js"></script>
+<script src="../js/login.js"></script>
+<script src="../js/validaciones.js"></script>
+
+</body>
+</html>
