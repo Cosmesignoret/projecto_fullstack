@@ -1,0 +1,94 @@
+
+/* ---- Variables de marca ---- */
+:root {
+    --stog-accent: #22c55e;      
+    --stog-dark: #111827;
+    --stog-muted: #6b7280;
+}
+
+body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ---- Barra superior (Iniciar sesión - Registrar usuario) ---- */
+.barrasuperior {
+    background-color: #212529;
+    padding: 5px;
+}
+
+.barrasuperior a {
+    color: var(--stog-accent);
+    transition: color 0.2s ease;
+}
+
+.barrasuperior a:hover {
+    color: white;
+}
+
+/* ---- Navbar ---- */
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-size: 1.8rem;
+}
+
+.navbar .nav-link {
+    font-weight: 500;
+}
+
+.navbar .nav-link.active {
+    color: var(--stog-accent) !important;
+}
+
+/* ---- Hero ---- */
+.display-5 {
+    letter-spacing: 1px;
+}
+
+/* ---- Tarjetas de producto ---- */
+.card {
+    border: none;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card img {
+    transition: transform 0.3s ease;
+}
+
+.card:hover img {
+    transform: scale(1.05);
+}
+
+.card-body a {
+    color: var(--stog-dark);
+    font-weight: 600;
+}
+
+.card-body .fw-bold {
+    color: var(--stog-accent);
+}
+
+/* ---- Footer ---- */
+footer a.text-white-50:hover {
+    color: #fff !important;
+}
+
+footer .input-group .form-control:focus {
+    box-shadow: none;
+    border-color: var(--stog-accent);
+}
+
+/* ---- Utilidades ---- */
+.object-fit-cover {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
