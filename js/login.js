@@ -1,9 +1,10 @@
-const formulario =
+const formularioLogin =
     document.getElementById("formularioLogin");
 
-formulario.addEventListener(
-    "submit",
-    function (event) {
+if (formularioLogin) {
+    formularioLogin.addEventListener(
+        "submit",
+        function (event) {
 
         // ---------------------------------------
         // EVITAR ENVÍO AUTOMÁTICO
@@ -145,4 +146,7 @@ formulario.addEventListener(
         }
 
     }
-);
+    
+); 
+}
+

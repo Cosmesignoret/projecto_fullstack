@@ -1,9 +1,10 @@
-const formulario =
+const formularioValidacion =
     document.getElementById("formularioRegistro");
 
-formulario.addEventListener(
-    "submit",
-    function (event) {
+if (formularioValidacion) {
+    formularioValidacion.addEventListener(
+        "submit",
+        function (event) {
 
         // ---------------------------------------
         // EVITAR ENVÍO AUTOMÁTICO
@@ -400,3 +401,4 @@ formulario.addEventListener(
 
     }
 );
+}
