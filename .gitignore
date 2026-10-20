@@ -1,0 +1,12 @@
+# Dependencias instaladas: se recuperan con npm install y no se entregan al repositorio.
+node_modules/
+**/node_modules/
+
+# Archivos generados al compilar o ejecutar cobertura.
+build/
+**/build/
+coverage/
+**/coverage/
+
+# Archivos locales de npm.
+npm-debug.log*

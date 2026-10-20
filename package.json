@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm --prefix Frontend start",
+    "build": "npm --prefix Frontend run build",
+    "test": "npm --prefix Frontend test",
+    "test:watch": "npm --prefix Frontend run test:watch"
   },
   "repository": {
     "type": "git",
@@ -17,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/Cosmesignoret/projecto_fullstack/issues"
   },
-  "homepage": "https://github.com/Cosmesignoret/projecto_fullstack#readme"
+  "homepage": "https://github.com/Cosmesignoret/projecto_fullstack#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "react-bootstrap": "^2.10.10"
+  }
 }
