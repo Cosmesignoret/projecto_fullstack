@@ -1,17 +1,16 @@
-# Stog — proyecto de tienda
+# React + Vite
 
-La aplicación React activa está en la carpeta `Frontend` dentro de esta carpeta. Las páginas HTML originales permanecen aquí en la raíz (`index.html`, `views/`, `css/`, `js/` e `imagenes/`) como respaldo y referencia para la migración.
+This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
-## Ejecutar la aplicación React
+Currently, two official plugins are available:
 
-Abre una terminal dentro de la carpeta interior `Frontend` y ejecuta `npm install` y luego `npm start`. La aplicación se inicia en `http://localhost:3000`.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Qué está integrado
+## React Compiler
 
-- Inicio, catálogo, ofertas, detalle de juegos, carrito, contacto, inicio de sesión y registro.
-- Navegación dentro de React y componentes reutilizables para los productos.
-- Carrito con estado de React y persistencia en el navegador.
-- Diseño con Bootstrap adaptable a pantallas pequeñas.
-- Pruebas de interfaz con Jasmine y Karma, configuradas para Chrome Headless.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-Desde la carpeta interior de React, ejecuta `npm install` para instalar las herramientas y actualizar su archivo de dependencias; luego `npm test` ejecuta las pruebas. Necesitas Google Chrome instalado.
+## Expanding the Oxlint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
