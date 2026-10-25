@@ -1,22 +1,31 @@
 import { createContext, useContext, useState } from 'react'
 import {
-  productos as productosIniciales,
-  categorias as categoriasIniciales,
-  usuarios as usuariosIniciales
-} from '../data/productos.js'
+  listarProductos, agregarProducto, editarProducto, eliminarProducto,
+  listarCategorias, agregarCategoria, editarCategoria, eliminarCategoria,
+  listarUsuarios, buscarUsuarioPorCorreo as dbBuscarUsuario, agregarUsuario, editarUsuario, eliminarUsuario,
+  obtenerSesion, guardarSesion, cerrarSesion as dbCerrarSesion,
+  listarOrdenes, agregarOrden
+} from '../data/db.js'
 
-// Estado global de la tienda: productos (con su stock), usuarios, sesión y órdenes.
-// Todo vive en memoria con useState: no hay base de datos, y al recargar la página
-// la tienda vuelve a los datos iniciales de data/productos.js.
-// Las props "sesionInicial" y "usuariosIniciales" permiten arrancar con datos
-// distintos (se usan sobre todo en las pruebas).
+// Estado global de la tienda: productos (con su stock), categorías, usuarios, sesión y órdenes.
+// Los datos viven en db.js (que los guarda en localStorage, así no se pierden al recargar).
+// Aquí se copian a useState para que React redibuje la pantalla cuando algo cambia:
+// cada función de este contexto (1) llama a db.js para modificar y guardar, y
+// (2) vuelve a leer la lista para actualizar el estado.
+// La prop "sesionInicial" permite arrancar con una sesión distinta (se usa en las pruebas).
 const TiendaContext = createContext()
 
 export function TiendaProvider({ children, sesionInicial = null }) {
-  const [productos, setProductos] = useState(productosIniciales)
-  const [usuarios, setUsuarios] = useState(usuariosIniciales)
-  const [sesion, setSesion] = useState(sesionInicial)
-  const [ordenes, setOrdenes] = useState([])
+  const [productos, setProductos] = useState(listarProductos)
+  const [categorias, setCategorias] = useState(listarCategorias)
+  const [usuarios, setUsuarios] = useState(listarUsuarios)
+  const [sesion, setSesion] = useState(() => sesionInicial ?? obtenerSesion())
+  const [ordenes, setOrdenes] = useState(listarOrdenes)
+
+  // Vuelven a leer cada lista desde db.js
+  const refrescarProductos = () => setProductos(listarProductos())
+  const refrescarCategorias = () => setCategorias(listarCategorias())
+  const refrescarUsuarios = () => setUsuarios(listarUsuarios())
 
   // ---------- productos ----------
 
@@ -28,34 +37,94 @@ export function TiendaProvider({ children, sesionInicial = null }) {
     return productos.filter((p) => p.categoria === categoria)
   }
 
-  // Los juegos en oferta se calculan a partir de la lista: no se guardan aparte
+  // Los juegos en oferta y los críticos se calculan a partir de la lista: no se guardan aparte
   const ofertas = productos.filter((p) => p.enOferta === true)
+  const productosCriticos = productos.filter((p) => p.stock <= p.stockCritico)
+
+  function crearProducto(datos) {
+    const nuevo = agregarProducto(datos)
+    refrescarProductos()
+    return nuevo
+  }
+
+  function actualizarProducto(id, datos) {
+    const editado = editarProducto(id, datos)
+    refrescarProductos()
+    return editado
+  }
+
+  function borrarProducto(id) {
+    eliminarProducto(id)
+    refrescarProductos()
+  }
+
+  // ---------- categorías ----------
+
+  function crearCategoria(datos) {
+    const nueva = agregarCategoria(datos)
+    refrescarCategorias()
+    return nueva
+  }
+
+  // Renombrar una categoría también cambia los productos que la usan
+  function actualizarCategoria(id, datos) {
+    const editada = editarCategoria(id, datos)
+    refrescarCategorias()
+    refrescarProductos()
+    return editada
+  }
+
+  // Devuelve false si no se pudo eliminar porque aún tiene productos
+  function borrarCategoria(id) {
+    const eliminada = eliminarCategoria(id)
+    refrescarCategorias()
+    return eliminada
+  }
 
   // ---------- usuarios y sesión ----------
 
   function buscarUsuarioPorCorreo(correo) {
-    const buscado = (correo || '').trim().toLowerCase()
-    return usuarios.find((u) => u.correo.toLowerCase() === buscado) || null
+    return dbBuscarUsuario(correo)
   }
 
   function registrarUsuario(datos) {
-    const nuevo = { ...datos, id: usuarios.length + 1 }
-    setUsuarios([...usuarios, nuevo])
+    const nuevo = agregarUsuario(datos)
+    refrescarUsuarios()
     return nuevo
   }
 
+  function actualizarUsuario(id, datos) {
+    const editado = editarUsuario(id, datos)
+    refrescarUsuarios()
+    // Si el usuario editado es el que tiene la sesión abierta, la sesión se actualiza también
+    if (sesion && editado && sesion.id === editado.id) {
+      setSesion(guardarSesion(editado))
+    }
+    return editado
+  }
+
+  function borrarUsuario(id) {
+    eliminarUsuario(id)
+    refrescarUsuarios()
+    // Si se elimina al usuario con sesión abierta, se cierra su sesión
+    if (sesion && sesion.id === Number(id)) {
+      cerrarSesion()
+    }
+  }
+
   // Devuelve el usuario si el correo y la contraseña coinciden, o null si no.
-  // La sesión se arma campo por campo para que la contraseña nunca quede guardada en ella.
+  // guardarSesion arma la sesión campo por campo: la contraseña nunca queda guardada en ella.
   function iniciarSesion(correo, contrasena) {
-    const usuario = buscarUsuarioPorCorreo(correo)
+    const usuario = dbBuscarUsuario(correo)
     if (usuario === null || usuario.contrasena !== contrasena) {
       return null
     }
-    setSesion({ id: usuario.id, nombre: usuario.nombre, apellidos: usuario.apellidos, correo: usuario.correo })
+    setSesion(guardarSesion(usuario))
     return usuario
   }
 
   function cerrarSesion() {
+    dbCerrarSesion()
     setSesion(null)
   }
 
@@ -65,34 +134,33 @@ export function TiendaProvider({ children, sesionInicial = null }) {
     return ordenes.find((o) => o.numero === numero) || null
   }
 
-  // Registra una compra aprobada: crea la orden (con número y fecha) y descuenta el stock
-  // de cada juego comprado. Math.max evita que el stock quede en negativo.
+  // Registra una compra aprobada: db.js crea la orden (con número y fecha) y descuenta el stock
+  // de cada juego comprado.
   function comprar(datosOrden) {
-    const orden = {
-      ...datosOrden,
-      // Número que ve el cliente: ST-ORD-1001, ST-ORD-1002, etc.
-      numero: 'ST-ORD-' + (1001 + ordenes.length),
-      fecha: new Date().toISOString()
-    }
-    setOrdenes([...ordenes, orden])
-    setProductos(
-      productos.map((p) => {
-        const comprado = datosOrden.items.find((item) => item.id === p.id)
-        return comprado ? { ...p, stock: Math.max(0, p.stock - comprado.cantidad) } : p
-      })
-    )
+    const orden = agregarOrden(datosOrden)
+    setOrdenes(listarOrdenes())
+    refrescarProductos()
     return orden
   }
 
   const valor = {
     productos,
-    categorias: categoriasIniciales,
+    categorias,
     ofertas,
+    productosCriticos,
     buscarProductoPorId,
     buscarProductosPorCategoria,
+    crearProducto,
+    actualizarProducto,
+    borrarProducto,
+    crearCategoria,
+    actualizarCategoria,
+    borrarCategoria,
     usuarios,
     buscarUsuarioPorCorreo,
     registrarUsuario,
+    actualizarUsuario,
+    borrarUsuario,
     sesion,
     iniciarSesion,
     cerrarSesion,

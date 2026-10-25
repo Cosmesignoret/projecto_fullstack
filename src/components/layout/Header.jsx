@@ -26,6 +26,7 @@ function Header() {
           {sesion ? (
             <>
               <span className="saludo me-3">Hola, {sesion.nombre}</span>
+              {sesion.rol === 'administrador' && <Link to="/admin" className="me-3">Panel admin</Link>}
               <button type="button" className="enlace" onClick={handleSalir}>Cerrar sesión</button>
             </>
           ) : (

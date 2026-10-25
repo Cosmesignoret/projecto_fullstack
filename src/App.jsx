@@ -2,11 +2,13 @@ import { HashRouter, Routes, Route, Outlet } from 'react-router-dom'
 import { TiendaProvider } from './context/TiendaContext.jsx'
 import { CarritoProvider } from './context/CarritoContext.jsx'
 import Layout from './components/layout/Layout.jsx'
+import AdminLayout from './components/admin/AdminLayout.jsx'
 
 import Home from './pages/Home.jsx'
 import Productos from './pages/Productos.jsx'
 import DetalleProducto from './pages/DetalleProducto.jsx'
 import Categorias from './pages/Categorias.jsx'
+import CategoriaDetalle from './pages/CategoriaDetalle.jsx'
 import Ofertas from './pages/Ofertas.jsx'
 import Carrito from './pages/Carrito.jsx'
 import Checkout from './pages/Checkout.jsx'
@@ -18,6 +20,11 @@ import Registro from './pages/Registro.jsx'
 import NoEncontrada from './pages/NoEncontrada.jsx'
 import PagoCorrecto from './pages/PagoCorrecto.jsx'
 import PagoError from './pages/PagoError.jsx'
+import AdminDashboard from './pages/AdminDashboard.jsx'
+import AdminProductos from './pages/AdminProductos.jsx'
+import AdminCategorias from './pages/AdminCategorias.jsx'
+import AdminUsuarios from './pages/AdminUsuarios.jsx'
+import AdminOrdenes from './pages/AdminOrdenes.jsx'
 
 // Envuelve las páginas públicas con el Header y el Footer. <Outlet /> es el hueco
 // donde se dibuja la página que corresponde a la URL.
@@ -42,6 +49,7 @@ function App() {
               <Route path="/productos" element={<Productos />} />
               <Route path="/productos/:id" element={<DetalleProducto />} />
               <Route path="/categorias" element={<Categorias />} />
+              <Route path="/categorias/:id" element={<CategoriaDetalle />} />
               <Route path="/ofertas" element={<Ofertas />} />
               <Route path="/carrito" element={<Carrito />} />
               <Route path="/checkout" element={<Checkout />} />
@@ -52,9 +60,22 @@ function App() {
               <Route path="/contacto" element={<Contacto />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registro" element={<Registro />} />
-              <Route path="*" element={<NoEncontrada />} />
             </Route>
 
+            {/* Panel de administración: tiene su propio menú lateral (sin Header ni Footer públicos)
+                y AdminLayout solo deja entrar a usuarios con rol administrador */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="productos" element={<AdminProductos />} />
+              <Route path="categorias" element={<AdminCategorias />} />
+              <Route path="usuarios" element={<AdminUsuarios />} />
+              <Route path="ordenes" element={<AdminOrdenes />} />
+            </Route>
+
+            {/* Cualquier otra URL: página 404 dentro del layout público */}
+            <Route element={<LayoutPublico />}>
+              <Route path="*" element={<NoEncontrada />} />
+            </Route>
           </Routes>
         </HashRouter>
       </CarritoProvider>

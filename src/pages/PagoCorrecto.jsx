@@ -1,12 +1,15 @@
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTienda } from '../context/TiendaContext.jsx'
-import { pesos } from '../js/formato.js'
+import ResumenCompra from '../components/ResumenCompra.jsx'
 
 function PagoCorrecto() {
   // El número de orden viaja en la URL: /pago-correcto/ST-ORD-1001
   const { numero } = useParams()
   const { buscarOrdenPorNumero } = useTienda()
   const orden = buscarOrdenPorNumero(numero)
+  // true cuando el usuario presionó "Enviar boleta por email"
+  const [enviada, setEnviada] = useState(false)
 
   // Si alguien entra con un número que no existe, no hay nada que mostrar
   if (orden === null) {
@@ -22,6 +25,17 @@ function PagoCorrecto() {
   // 'es-CL' muestra la fecha en formato chileno
   const fecha = new Date(orden.fecha).toLocaleString('es-CL')
 
+  // Abre el diálogo de impresión del navegador; ahí se elige "Guardar como PDF".
+  // Al imprimir, el CSS oculta el menú, el pie de página y los botones (clase "no-imprimir").
+  function handleImprimir() {
+    window.print()
+  }
+
+  // El envío es simulado: no hay servidor de correo, solo se muestra el aviso
+  function handleEnviar() {
+    setEnviada(true)
+  }
+
   return (
     <>
       <section className="hero">
@@ -31,37 +45,30 @@ function PagoCorrecto() {
       </section>
 
       <section className="formulario">
-        <h2 className="mt-0">Resumen de la compra</h2>
-        <p>Fecha: {fecha}</p>
-        <div className="tabla-scroll">
-          <table className="tabla-stog">
-            <thead>
-              <tr>
-                <th>Juego</th>
-                <th>Cantidad</th>
-                <th>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orden.items.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.nombre}</td>
-                  <td>{item.cantidad}</td>
-                  <td>{pesos(item.precio * item.cantidad)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="mt-3"><strong>Total pagado: {pesos(orden.total)}</strong></p>
-      </section>
+        <p className="text-muted">Fecha: {fecha} · Método de pago: {orden.metodoPago}</p>
+        <ResumenCompra
+          cliente={orden.cliente}
+          direccion={orden.direccion}
+          items={orden.items}
+          total={orden.total}
+          etiquetaTotal="Total pagado"
+        />
 
-      <section className="formulario mt-3">
-        <h2 className="mt-0">Datos de la compra</h2>
-        <p>{orden.cliente.nombre} {orden.cliente.apellidos} · {orden.cliente.correo}</p>
-        <p>Método de pago: {orden.metodoPago}</p>
-        <p>Enviamos las claves de descarga de tus juegos a tu correo.</p>
-        <Link to="/productos" className="boton">Seguir comprando</Link>
+        <div className="no-imprimir mt-4">
+          <button type="button" className="btn btn-danger" onClick={handleImprimir}>
+            Imprimir boleta en PDF
+          </button>
+          <button type="button" className="btn btn-success ms-2" onClick={handleEnviar}>
+            Enviar boleta por email
+          </button>
+          <Link to="/productos" className="btn btn-outline-secondary ms-2">Seguir comprando</Link>
+
+          {enviada && (
+            <div className="alert alert-success mt-3 mb-0" role="status">
+              Enviamos la boleta a {orden.cliente.correo}.
+            </div>
+          )}
+        </div>
       </section>
     </>
   )

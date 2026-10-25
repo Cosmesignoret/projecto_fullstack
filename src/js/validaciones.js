@@ -32,3 +32,51 @@ export function validarEdad(edad) {
   if (!Number.isInteger(n) || n < 18 || n > 100) return 'La edad debe estar entre 18 y 100 años.'
   return ''
 }
+
+// ---------- validaciones del panel de administración (CRUD de productos) ----------
+
+// Número entero entre minimo y maximo. Recibe el valor tal como sale del input (texto).
+export function validarEntero(valor, etiqueta, minimo = 0, maximo = 100000000) {
+  if (String(valor).trim() === '') return etiqueta + ' es obligatorio.'
+  const n = Number(valor)
+  if (isNaN(n) || !Number.isInteger(n)) return etiqueta + ' debe ser un número entero.'
+  if (n < minimo) return etiqueta + ' no puede ser menor a ' + minimo + '.'
+  if (n > maximo) return etiqueta + ' no puede ser mayor a ' + maximo + '.'
+  return ''
+}
+
+// Revisa el formulario completo de un producto. Devuelve un objeto con un mensaje por cada
+// campo con error ({} si todo está bien): { nombre: '...', precio: '...' }
+export function validarProducto(form) {
+  const errores = {}
+
+  const errorNombre = validarNombre(form.nombre, 'El nombre', 2, 100)
+  if (errorNombre) errores.nombre = errorNombre
+
+  const descripcion = (form.descripcion || '').trim()
+  if (descripcion === '') errores.descripcion = 'La descripción es obligatoria.'
+  else if (descripcion.length > 300) errores.descripcion = 'La descripción no puede tener más de 300 caracteres.'
+
+  if (!form.categoria) errores.categoria = 'Selecciona una categoría.'
+
+  const errorPrecio = validarEntero(form.precio, 'El precio', 1)
+  if (errorPrecio) errores.precio = errorPrecio
+
+  const errorStock = validarEntero(form.stock, 'El stock', 0, 100000)
+  if (errorStock) errores.stock = errorStock
+
+  const errorCritico = validarEntero(form.stockCritico, 'El stock crítico', 0, 100000)
+  if (errorCritico) errores.stockCritico = errorCritico
+
+  // El precio de oferta solo se revisa si el producto está en oferta, y debe ser menor al normal
+  if (form.enOferta) {
+    const errorOferta = validarEntero(form.precioOferta, 'El precio de oferta', 1)
+    if (errorOferta) {
+      errores.precioOferta = errorOferta
+    } else if (!errorPrecio && Number(form.precioOferta) >= Number(form.precio)) {
+      errores.precioOferta = 'El precio de oferta debe ser menor al precio normal.'
+    }
+  }
+
+  return errores
+}

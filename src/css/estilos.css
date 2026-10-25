@@ -1037,3 +1037,45 @@ footer.footer-stog hr {
   font-size: 0.8rem;
   text-transform: capitalize;
 }
+
+/* Tarjeta de categoría (vista /categorias) */
+.tarjeta-categoria {
+  display: block;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-left: 4px solid var(--stog-accent);
+  border-radius: 8px;
+  padding: 18px 20px;
+  color: var(--stog-texto);
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.tarjeta-categoria:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+  color: var(--stog-texto);
+}
+
+.tarjeta-categoria h2 {
+  color: var(--stog-dark);
+}
+
+.tarjeta-categoria small {
+  color: var(--stog-accent-dark);
+  font-weight: 600;
+}
+
+/* Al imprimir la boleta (botón "Imprimir boleta en PDF") se ocultan el menú, el pie y los botones */
+@media print {
+  header,
+  footer,
+  .no-imprimir {
+    display: none !important;
+  }
+
+  body {
+    background-color: white;
+  }
+}
