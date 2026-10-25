@@ -80,3 +80,27 @@ export function validarProducto(form) {
 
   return errores
 }
+
+// ---------- validaciones del perfil del administrador ----------
+
+// Revisa el cambio de contraseña. Si los tres campos están vacíos no se quiere cambiar nada
+// y no hay errores. Devuelve un objeto con un mensaje por campo con error ({} si todo está bien).
+export function validarCambioContrasena(actual, nueva, confirmar, contrasenaGuardada) {
+  const errores = {}
+  if (!actual && !nueva && !confirmar) {
+    return errores
+  }
+  if (actual !== contrasenaGuardada) {
+    errores.actual = 'La contraseña actual no es correcta.'
+  }
+  const errorNueva = validarContrasena(nueva)
+  if (errorNueva) {
+    errores.nueva = errorNueva
+  } else if (nueva === actual) {
+    errores.nueva = 'La nueva contraseña debe ser distinta de la actual.'
+  }
+  if (confirmar !== nueva) {
+    errores.confirmar = 'Las contraseñas no coinciden.'
+  }
+  return errores
+}

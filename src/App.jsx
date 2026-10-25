@@ -25,6 +25,11 @@ import AdminProductos from './pages/AdminProductos.jsx'
 import AdminCategorias from './pages/AdminCategorias.jsx'
 import AdminUsuarios from './pages/AdminUsuarios.jsx'
 import AdminOrdenes from './pages/AdminOrdenes.jsx'
+import AdminBoleta from './pages/AdminBoleta.jsx'
+import AdminHistorialCompras from './pages/AdminHistorialCompras.jsx'
+import AdminProductosCriticos from './pages/AdminProductosCriticos.jsx'
+import AdminReportes from './pages/AdminReportes.jsx'
+import AdminPerfil from './pages/AdminPerfil.jsx'
 
 // Envuelve las páginas públicas con el Header y el Footer. <Outlet /> es el hueco
 // donde se dibuja la página que corresponde a la URL.
@@ -67,9 +72,14 @@ function App() {
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="productos" element={<AdminProductos />} />
+              <Route path="productos/criticos" element={<AdminProductosCriticos />} />
               <Route path="categorias" element={<AdminCategorias />} />
               <Route path="usuarios" element={<AdminUsuarios />} />
+              <Route path="usuarios/:id/compras" element={<AdminHistorialCompras />} />
               <Route path="ordenes" element={<AdminOrdenes />} />
+              <Route path="ordenes/:numero" element={<AdminBoleta />} />
+              <Route path="reportes" element={<AdminReportes />} />
+              <Route path="perfil" element={<AdminPerfil />} />
             </Route>
 
             {/* Cualquier otra URL: página 404 dentro del layout público */}

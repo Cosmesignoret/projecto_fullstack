@@ -9,11 +9,11 @@ function AdminSidebar() {
 
       <nav className="admin-nav">
         {secciones.map((seccion) => (
-          // "end" hace que /admin cuente como activo solo en /admin exacto y no en /admin/productos
+          // "end" hace que el link esté activo solo en su URL exacta (ver seccionesAdmin.js)
           <NavLink
             key={seccion.ruta}
             to={seccion.ruta}
-            end={seccion.ruta === '/admin'}
+            end={seccion.exacta === true}
             className={({ isActive }) => (isActive ? 'activo' : '')}
           >
             {seccion.icono} {seccion.texto}

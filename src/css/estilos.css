@@ -1079,3 +1079,16 @@ footer.footer-stog hr {
     background-color: white;
   }
 }
+
+
+/* Al imprimir una boleta desde el admin también se ocultan el menú lateral y la barra superior */
+@media print {
+  .admin-sidebar,
+  .admin-topbar {
+    display: none !important;
+  }
+
+  .admin-main {
+    padding: 0;
+  }
+}

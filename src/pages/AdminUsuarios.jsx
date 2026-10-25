@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useTienda } from '../context/TiendaContext.jsx'
 import { validarNombre, validarCorreo, validarEdad, validarContrasena } from '../js/validaciones.js'
 
@@ -171,6 +172,7 @@ function AdminUsuarios() {
                   <td><span className="badge-rol">{u.rol}</span></td>
                   <td className="text-nowrap">
                     <button className="btn btn-sm btn-success" onClick={() => handleEditar(u)}>Editar</button>
+                    <Link to={'/admin/usuarios/' + u.id + '/compras'} className="btn btn-sm btn-outline-dark ms-1">Historial</Link>
                     {/* El admin no puede eliminarse a sí mismo (se quedaría sin acceso al panel) */}
                     <button className="btn btn-sm btn-danger ms-1" onClick={() => handleEliminar(u)}
                       disabled={sesion && sesion.id === u.id}>
