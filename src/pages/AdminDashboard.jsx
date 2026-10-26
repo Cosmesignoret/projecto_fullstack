@@ -1,55 +1,54 @@
 import { Link } from 'react-router-dom'
 import { useTienda } from '../context/TiendaContext.jsx'
 import { secciones } from '../data/seccionesAdmin.js'
-import { pesos } from '../js/formato.js'
 
-// Resumen del panel: números clave y los productos con stock crítico.
-// Todo se calcula con los datos del contexto, así que se actualiza solo cuando algo cambia.
 function AdminDashboard() {
-  const { productos, usuarios, ordenes, productosCriticos } = useTienda()
-  const totalVendido = ordenes.reduce((suma, o) => suma + o.total, 0)
+  const { ordenes, productos, usuarios, productosCriticos, sesion } = useTienda()
+  const esAdmin = sesion !== null && sesion.rol === 'administrador'
+  // Las tarjetas son todas las secciones menos el Dashboard (ya estamos en él).
+  // El vendedor no ve las secciones solo para administradores.
+  const tarjetas = secciones.filter((s) => s.ruta !== '/admin' && (!s.soloAdmin || esAdmin))
 
   return (
     <>
-      <div className="admin-topbar"><h1>Dashboard</h1></div>
-
-      <div className="admin-resumen">
-        <div className="admin-tarjeta"><span className="numero">{ordenes.length}</span><span className="etiqueta">Órdenes ({pesos(totalVendido)})</span></div>
-        <div className="admin-tarjeta"><span className="numero">{productos.length}</span><span className="etiqueta">Productos</span></div>
-        <div className="admin-tarjeta"><span className="numero">{usuarios.length}</span><span className="etiqueta">Usuarios</span></div>
-        <div className="admin-tarjeta"><span className="numero">{productosCriticos.length}</span><span className="etiqueta">Productos críticos</span></div>
+      <div className="admin-topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <p className="text-muted mb-0">Resumen de las actividades diarias. ¡Hola, {sesion ? sesion.nombre : 'Admin'}!</p>
+        </div>
       </div>
 
-      <section className="admin-panel mb-3">
-        <h2>Productos con stock crítico</h2>
-        {productosCriticos.length === 0 ? (
-          <p className="mb-0">Todos los productos tienen stock suficiente.</p>
-        ) : (
-          <div className="tabla-scroll">
-            <table className="tabla-stog">
-              <thead><tr><th>Código</th><th>Nombre</th><th>Stock</th><th>Crítico</th></tr></thead>
-              <tbody>
-                {productosCriticos.map((p) => (
-                  <tr key={p.id}>
-                    <td>{p.codigo}</td>
-                    <td>{p.nombre}</td>
-                    <td className="stock-critico">{p.stock}</td>
-                    <td>{p.stockCritico}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+      <section className="admin-resumen">
+        <div className="admin-tarjeta azul">
+          <span className="etiqueta">Compras</span>
+          <span className="numero">{ordenes.length}</span>
+          <small>Órdenes realizadas en la tienda</small>
+        </div>
+        <div className="admin-tarjeta verde">
+          <span className="etiqueta">Productos</span>
+          <span className="numero">{productos.length}</span>
+          <small>{productosCriticos.length} con stock crítico</small>
+        </div>
+        <div className="admin-tarjeta amarilla">
+          <span className="etiqueta">Usuarios</span>
+          <span className="numero">{usuarios.length}</span>
+          <small>Cuentas registradas</small>
+        </div>
       </section>
 
-      <section className="admin-panel">
-        <h2>Accesos rápidos</h2>
-        <div className="d-flex flex-wrap gap-2">
-          {secciones.filter((s) => s.ruta !== '/admin').map((s) => (
-            <Link key={s.ruta} to={s.ruta} className="btn btn-outline-dark">{s.icono} {s.texto}</Link>
-          ))}
-        </div>
+      <section className="admin-tiles">
+        {tarjetas.map((t) => (
+          <Link key={t.ruta} to={t.ruta} className="admin-tile">
+            <span className="icono">{t.icono}</span>
+            <strong>{t.texto}</strong>
+            <small>{t.detalle}</small>
+          </Link>
+        ))}
+        <Link to="/" className="admin-tile">
+          <span className="icono">🏬</span>
+          <strong>Tienda</strong>
+          <small>Visualiza tu tienda en tiempo real.</small>
+        </Link>
       </section>
     </>
   )

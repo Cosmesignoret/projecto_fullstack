@@ -1,42 +1,47 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import ListaJuegos from '../components/ListaJuegos.jsx'
 import { useTienda } from '../context/TiendaContext.jsx'
 
-// Vista /categorias: arriba una tarjeta por cada categoría (cada una lleva a su propia página,
-// /categorias/:id) y abajo los juegos separados por categoría.
 function Categorias() {
-  const { categorias, buscarProductosPorCategoria } = useTienda()
+  const { productos: todos, categorias, buscarProductosPorCategoria } = useTienda()
+  // 'Todos' muestra todo sin filtrar; si no, se guarda el nombre de la categoría elegida
+  const [activa, setActiva] = useState('Todos')
+
+  const productos = activa === 'Todos' ? todos : buscarProductosPorCategoria(activa)
+  const categoriaActual = categorias.find((c) => c.nombre === activa)
 
   return (
     <>
       <section className="hero">
         <h1>Videojuegos por categoría</h1>
-        <p className="mb-0">Explora la tienda según el género que más te gusta.</p>
+        <p>Explora la tienda filtrando por el género que más te gusta.</p>
+
+        <div className="d-flex flex-wrap justify-content-center gap-2">
+          <button
+            type="button"
+            className={'btn ' + (activa === 'Todos' ? 'btn-success' : 'btn-outline-success')}
+            onClick={() => setActiva('Todos')}
+          >
+            Todos
+          </button>
+          {categorias.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              className={'btn ' + (activa === cat.nombre ? 'btn-success' : 'btn-outline-success')}
+              onClick={() => setActiva(cat.nombre)}
+            >
+              {cat.nombre}
+            </button>
+          ))}
+        </div>
+
+        {categoriaActual && categoriaActual.descripcion && (
+          <p className="text-muted mt-3 mb-0">{categoriaActual.descripcion}</p>
+        )}
       </section>
 
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 my-2">
-        {categorias.map((cat) => (
-          <div className="col d-flex" key={cat.id}>
-            <Link to={'/categorias/' + cat.id} className="tarjeta-categoria">
-              <h2 className="h5">{cat.nombre}</h2>
-              <p className="mb-2">{cat.descripcion}</p>
-              <small>{buscarProductosPorCategoria(cat.nombre).length} juego(s) · Ver categoría →</small>
-            </Link>
-          </div>
-        ))}
-      </div>
-
-      {categorias.map((cat) => {
-        const juegos = buscarProductosPorCategoria(cat.nombre)
-        // Una categoría sin juegos no dibuja su sección
-        if (juegos.length === 0) return null
-        return (
-          <section key={cat.id} className="mt-4">
-            <h2 className="h3">{cat.nombre}</h2>
-            <ListaJuegos productos={juegos} vacio="" />
-          </section>
-        )
-      })}
+      <ListaJuegos productos={productos} vacio="No hay videojuegos disponibles en esta categoría." />
     </>
   )
 }

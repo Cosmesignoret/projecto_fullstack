@@ -1,8 +1,15 @@
 import { Link } from 'react-router-dom'
-import { Row, Col } from 'react-bootstrap'
+import { Carousel } from 'react-bootstrap'
 import ListaJuegos from '../components/ListaJuegos.jsx'
 import { useTienda } from '../context/TiendaContext.jsx'
 import { urlImagen } from '../js/formato.js'
+
+// Diapositivas del carrusel de la portada
+const diapositivas = [
+  { imagen: '/img/gta.webp', titulo: 'Nuevos lanzamientos', texto: 'Descubre los últimos juegos disponibles en nuestra tienda.' },
+  { imagen: '/img/doom.webp', titulo: 'Acción sin pausa', texto: 'Shooters y combates rápidos para los más intensos.' },
+  { imagen: '/img/bh.jpg', titulo: 'Historias que importan', texto: 'Aventuras narrativas donde tus decisiones cambian el final.' }
+]
 
 function Home() {
   // Los destacados son los primeros 4 productos de la tienda
@@ -12,22 +19,25 @@ function Home() {
   return (
     <>
       <section className="hero-stog">
-        <Row className="align-items-center g-4">
-          <Col xs={12} lg={6}>
-            <h1>Tienda online</h1>
-            <p className="my-3">
-              Encuentra los mejores videojuegos de acción, mundo abierto y mucho más.
-              Descarga o compra tus títulos favoritos hoy mismo.
-            </p>
-            <Link to="/productos" className="btn btn-dark">Ver productos</Link>
-          </Col>
-          <Col xs={12} lg={6}>
-            <div className="ratio ratio-16x9">
-              <img src={urlImagen('/img/gta.webp')} alt="Stog videojuegos" />
-            </div>
-          </Col>
-        </Row>
+        <h1>Tienda online</h1>
+        <p className="my-3">
+          Encuentra los mejores videojuegos de acción, mundo abierto y mucho más.
+          Descarga o compra tus títulos favoritos hoy mismo.
+        </p>
+        <Link to="/productos" className="btn btn-dark">Ver productos</Link>
       </section>
+
+      <Carousel className="carrusel-stog mb-4" aria-label="Novedades">
+        {diapositivas.map((d) => (
+          <Carousel.Item key={d.titulo}>
+            <img src={urlImagen(d.imagen)} alt={d.titulo} />
+            <Carousel.Caption>
+              <h3>{d.titulo}</h3>
+              <p>{d.texto}</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+        ))}
+      </Carousel>
 
       <section>
         <h2 className="text-center fw-bold">Destacados</h2>

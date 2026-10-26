@@ -33,74 +33,74 @@ export function validarEdad(edad) {
   return ''
 }
 
-// ---------- validaciones del panel de administración (CRUD de productos) ----------
+const DOMINIOS_ADMITIDOS = ['@duoc.cl', '@profesor.duoc.cl', '@gmail.com']
 
-// Número entero entre minimo y maximo. Recibe el valor tal como sale del input (texto).
-export function validarEntero(valor, etiqueta, minimo = 0, maximo = 100000000) {
-  if (String(valor).trim() === '') return etiqueta + ' es obligatorio.'
-  const n = Number(valor)
-  if (isNaN(n) || !Number.isInteger(n)) return etiqueta + ' debe ser un número entero.'
-  if (n < minimo) return etiqueta + ' no puede ser menor a ' + minimo + '.'
-  if (n > maximo) return etiqueta + ' no puede ser mayor a ' + maximo + '.'
+// Para los usuarios que crea el administrador: solo dominios admitidos
+export function validarCorreoAdmitido(correo) {
+  const error = validarCorreo(correo)
+  if (error) return error
+  const c = correo.trim().toLowerCase()
+  if (!DOMINIOS_ADMITIDOS.some((d) => c.endsWith(d))) {
+    return 'Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com.'
+  }
   return ''
 }
 
-// Revisa el formulario completo de un producto. Devuelve un objeto con un mensaje por cada
-// campo con error ({} si todo está bien): { nombre: '...', precio: '...' }
-export function validarProducto(form) {
-  const errores = {}
+// Calcula el dígito verificador con el algoritmo módulo 11 y lo compara con el ingresado
+export function validarRun(run) {
+  const limpio = (run || '').trim().toUpperCase()
+  if (limpio === '') return 'El RUN es obligatorio.'
+  if (limpio.length < 7 || limpio.length > 9) return 'El RUN debe tener entre 7 y 9 caracteres (ej: 190110222).'
+  if (!/^[0-9]{6,8}[0-9K]$/.test(limpio)) return 'El RUN ingresado no es válido.'
 
-  const errorNombre = validarNombre(form.nombre, 'El nombre', 2, 100)
-  if (errorNombre) errores.nombre = errorNombre
-
-  const descripcion = (form.descripcion || '').trim()
-  if (descripcion === '') errores.descripcion = 'La descripción es obligatoria.'
-  else if (descripcion.length > 300) errores.descripcion = 'La descripción no puede tener más de 300 caracteres.'
-
-  if (!form.categoria) errores.categoria = 'Selecciona una categoría.'
-
-  const errorPrecio = validarEntero(form.precio, 'El precio', 1)
-  if (errorPrecio) errores.precio = errorPrecio
-
-  const errorStock = validarEntero(form.stock, 'El stock', 0, 100000)
-  if (errorStock) errores.stock = errorStock
-
-  const errorCritico = validarEntero(form.stockCritico, 'El stock crítico', 0, 100000)
-  if (errorCritico) errores.stockCritico = errorCritico
-
-  // El precio de oferta solo se revisa si el producto está en oferta, y debe ser menor al normal
-  if (form.enOferta) {
-    const errorOferta = validarEntero(form.precioOferta, 'El precio de oferta', 1)
-    if (errorOferta) {
-      errores.precioOferta = errorOferta
-    } else if (!errorPrecio && Number(form.precioOferta) >= Number(form.precio)) {
-      errores.precioOferta = 'El precio de oferta debe ser menor al precio normal.'
-    }
+  const cuerpo = limpio.slice(0, -1)
+  const dvIngresado = limpio.slice(-1)
+  let suma = 0
+  let multiplicador = 2
+  for (let i = cuerpo.length - 1; i >= 0; i--) {
+    suma += parseInt(cuerpo.charAt(i), 10) * multiplicador
+    multiplicador = multiplicador < 7 ? multiplicador + 1 : 2
   }
-
-  return errores
+  const mod = 11 - (suma % 11)
+  const dvEsperado = mod === 11 ? '0' : mod === 10 ? 'K' : String(mod)
+  return dvIngresado === dvEsperado ? '' : 'El RUN ingresado no es válido.'
 }
 
-// ---------- validaciones del perfil del administrador ----------
+// Dirección de entrega: calle, región y comuna son obligatorias
+export function validarDireccion({ calle, region, comuna }) {
+  if ((calle || '').trim() === '') return 'La calle es obligatoria.'
+  if ((calle || '').length > 100) return 'La calle no puede superar los 100 caracteres.'
+  if (!region) return 'Selecciona una región.'
+  if (!comuna) return 'Selecciona una comuna.'
+  return ''
+}
 
-// Revisa el cambio de contraseña. Si los tres campos están vacíos no se quiere cambiar nada
-// y no hay errores. Devuelve un objeto con un mensaje por campo con error ({} si todo está bien).
-export function validarCambioContrasena(actual, nueva, confirmar, contrasenaGuardada) {
-  const errores = {}
-  if (!actual && !nueva && !confirmar) {
-    return errores
+// Valida el formulario de producto del admin. Devuelve el primer error o ''.
+export function validarProducto(p) {
+  const codigo = (p.codigo || '').trim()
+  if (codigo === '') return 'El código es obligatorio.'
+  if (codigo.length < 3 || codigo.length > 10) return 'El código debe tener entre 3 y 10 caracteres.'
+  if (!p.categoria) return 'Selecciona una categoría.'
+  const nombre = (p.nombre || '').trim()
+  if (nombre === '') return 'El nombre del producto es obligatorio.'
+  if (nombre.length > 60) return 'El nombre no puede superar los 60 caracteres.'
+  if (String(p.precio).trim() === '' || !Number.isInteger(Number(p.precio)) || Number(p.precio) < 1) {
+    return 'El precio debe ser un número entero mayor a $0.'
   }
-  if (actual !== contrasenaGuardada) {
-    errores.actual = 'La contraseña actual no es correcta.'
+  if (String(p.stock).trim() === '' || !Number.isInteger(Number(p.stock)) || Number(p.stock) < 0) {
+    return 'El stock debe ser un número entero, igual o mayor a 0.'
   }
-  const errorNueva = validarContrasena(nueva)
-  if (errorNueva) {
-    errores.nueva = errorNueva
-  } else if (nueva === actual) {
-    errores.nueva = 'La nueva contraseña debe ser distinta de la actual.'
+  if (String(p.stockCritico).trim() === '' || !Number.isInteger(Number(p.stockCritico)) || Number(p.stockCritico) < 0) {
+    return 'El stock crítico debe ser un número entero, igual o mayor a 0.'
   }
-  if (confirmar !== nueva) {
-    errores.confirmar = 'Las contraseñas no coinciden.'
+  const descripcion = (p.descripcion || '').trim()
+  if (descripcion === '') return 'La descripción es obligatoria.'
+  if (descripcion.length > 250) return 'La descripción no puede superar los 250 caracteres.'
+  if (p.enOferta) {
+    const oferta = Number(p.precioOferta)
+    if (!Number.isInteger(oferta) || oferta < 1 || oferta >= Number(p.precio)) {
+      return 'El precio de oferta debe ser un entero mayor a 0 y menor que el precio normal.'
+    }
   }
-  return errores
+  return ''
 }

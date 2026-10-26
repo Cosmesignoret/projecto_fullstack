@@ -1,24 +1,19 @@
 /* hoja de estilos de Stog (tienda de videojuegos) */
-
 :root {
   /* Colores de marca de Stog (los mismos de la Parte 1) */
   --stog-accent: #22c55e;       /* verde de acento */
   --stog-accent-dark: #16a34a;  /* verde al pasar el mouse */
-  --stog-dark: #111827;         /* azul muy oscuro: títulos y paneles */
+  --stog-dark: #111827;         /* azul muy oscuro: títulos y textos fuertes */
   --stog-navbar: #212529;       /* barra superior y navbar */
   --stog-muted: #6b7280;        /* texto secundario */
   --stog-fondo: #f8f9fa;
   --stog-texto: #212529;
 }
 
-html, body {
+html,
+body {
   overflow-x: hidden;
   width: 100%;
-}
-
-.admin-layout {
-  width: 100%;
-  overflow-x: hidden;
 }
 
 body {
@@ -28,7 +23,6 @@ body {
 }
 
 /* barra superior (Iniciar sesión / Registrar usuario) y navbar principal */
-
 .barrasuperior {
   background-color: var(--stog-navbar);
   padding: 5px 0;
@@ -92,7 +86,6 @@ body {
 }
 
 /* contenido principal */
-
 main {
   max-width: 1100px;
   margin: 0 auto;
@@ -132,6 +125,7 @@ main {
     height: 70px;
     object-fit: cover;
 }
+
 .hero h2 {
   color: var(--stog-dark);
   font-size: 2rem;
@@ -139,13 +133,8 @@ main {
   margin-bottom: 12px;
 }
 
-
 .hero p {
   margin-bottom: 20px;
-}
-
-.minimumIframe {
-  min-height: 400px;
 }
 
 .boton {
@@ -163,7 +152,6 @@ main {
 }
 
 /* footer */
-
 footer {
   background-color: var(--stog-navbar);
   color: #ddd;
@@ -176,57 +164,8 @@ footer a {
   color: var(--stog-accent);
 }
 
-
-/* tarjetas de servicios */
-
-.servicios h2,
-.pasos h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--stog-dark);
-  margin-bottom: 16px;
-}
-
-.tarjetas {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.tarjeta {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  flex: 1;
-  min-width: 250px;
-}
-
-.tarjeta h3 {
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.tarjeta a {
-  color: var(--stog-dark);
-  text-decoration: underline;
-}
-
-/* pasos de como funciona */
-
-.pasos {
-  margin-top: 24px;
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-}
-
-.pasos li {
-  margin-bottom: 8px;
-}
-
 /* estilos registro para definir el largo de los campos,
    y el color de los inputs */
-
 .registro-form {
   width: 100%;
   max-width: 440px;
@@ -239,7 +178,6 @@ footer a {
 }
 
 /* Textos para los inputs */
-
 .form-label {
   display: block;
   text-align: left;
@@ -274,32 +212,6 @@ footer a {
   margin-bottom: 12px;
 }
 
-.campo {
-  margin-bottom: 12px;
-}
-
-.campo label {
-  display: block;
-  margin-bottom: 4px;
-  font-weight: bold;
-}
-
-.campo input,
-.campo select {
-  width: 100%;
-  max-width: 400px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: white;
-}
-
-.mensaje-error {
-  color: #b3261e;
-  font-size: 0.9rem;
-  margin-top: 4px;
-}
-
 .tabla-stog {
   width: 100%;
   margin-top: 8px;
@@ -317,443 +229,12 @@ footer a {
   color: white;
 }
 
-
-/* =========================================
-   ADMIN HOME ESTILO
-   ========================================= */
-
-.admin-layout {
-  display: flex;
-  min-height: 100vh;
-  background-color: var(--stog-fondo);
-}
-
-.admin-sidebar {
-  width: 220px;
-  flex-shrink: 0;
-  background-color: var(--stog-dark);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  padding: 20px 0;
-}
-
-.admin-sidebar .logo {
-  color: white;
-  font-size: 1.25rem;
-  font-weight: bold;
-  padding: 0 20px 20px 20px;
-  display: block;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  margin-bottom: 12px;
-  text-decoration: none;
-}
-
-.admin-nav {
-  display: flex;
-  flex-direction: column;
-}
-
-.admin-nav a {
-  color: white;
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-left: 3px solid transparent;
-  text-decoration: none; /* Bootstrap subraya todos los links por defecto */
-}
-
-.admin-nav a:hover {
-  background-color: var(--stog-accent);
-  color: white; /* sin esto Bootstrap cambia el color del texto al pasar el mouse */
-}
-
-.admin-nav a.activo {
-  background-color: rgba(255, 255, 255, 0.08);
-  border-left-color: var(--stog-accent);
-  font-weight: bold;
-}
-
-.admin-nav .salir {
-  margin-top: auto;
-}
-
-
-/* contenido principal del admin */
-
-.admin-main {
-  flex: 1;
-  padding: 32px;
-  min-width: 0;
-  /* Anulan la regla genérica "main" del inicio del archivo (max-width 1100px y centrado),
-     que dejaría el panel angosto y con espacio vacío a los lados */
-  max-width: none;
-  margin: 0;
-}
-
-
-/* barra superior del admin */
-
-.admin-topbar {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.admin-topbar h1 {
-  font-size: 1.5rem;
-  color: var(--stog-dark);
-  margin: 0;
-}
-
-.admin-usuario {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto;
-  margin-right: 20px;
-}
-
-.admin-usuario .avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--stog-accent);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-}
-
-
-/* tarjetas de resumen */
-
-.admin-resumen {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  margin-bottom: 28px;
-}
-
-.admin-tarjeta {
-  background-color: white;
-  border-left: 4px solid var(--stog-accent);
-  border-radius: 6px;
-  padding: 18px 20px;
-}
-
-.admin-tarjeta .numero {
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--stog-dark);
-  display: block;
-}
-
-.admin-tarjeta .etiqueta {
-  color: var(--stog-texto);
-  font-size: 0.9rem;
-}
-
-
-/* actividad reciente */
-
-.admin-panel {
-  background-color: white;
-  border-radius: 6px;
-  padding: 16px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.admin-panel h2 {
-  color: var(--stog-dark);
-  margin-bottom: 14px;
-  font-size: 1.1rem;
-}
-
 .tabla-scroll {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain; /* evita que el scroll se escape de la pagina y termine rebotando*/
 }
-
-
-/* tabla admin */
-
-.admin-tabla {
-  border-collapse: collapse;
-  border: 1px solid #ddd;
-  table-layout: fixed;
-  min-width: 500px;
-}
-
-.admin-tabla th,
-.admin-tabla td {
-  text-align: left;
-  padding: 10px 8px;
-  border: 1px solid #ddd;
-}
-
-.admin-tabla th {
-  color: var(--stog-texto);
-  font-size: 0.85rem;
-  background-color: var(--stog-fondo);
-}
-
-
-/* ancho de las columnas */
-
-.admin-tabla th:nth-child(1),
-.admin-tabla td:nth-child(1) {
-  width: 15%;
-}
-
-.admin-tabla th:nth-child(2),
-.admin-tabla td:nth-child(2) {
-  width: 28%;
-}
-
-.admin-tabla th:nth-child(3),
-.admin-tabla td:nth-child(3) {
-  width: 15%;
-}
-
-.admin-tabla th:nth-child(4),
-.admin-tabla td:nth-child(4) {
-  width: 22%;
-}
-
-.admin-tabla th:nth-child(5),
-.admin-tabla td:nth-child(5) {
-  width: 20%;
-}
-
-
-/* boton nuevo usuario */
-
-.admin-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  margin: 0 0 16px 0;
-}
-
-
-/* acciones */
-
-.acciones a {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 4px;
-  color: white;
-  font-size: 0.85rem;
-  margin-right: 6px;
-}
-
-.acciones a.btn-editar {
-  background-color: var(--stog-accent);
-}
-
-.acciones a.btn-editar:hover {
-  background-color: var(--stog-dark);
-}
-
-.acciones a.btn-eliminar {
-  background-color: #b23c3c;
-}
-
-.acciones a.btn-eliminar:hover {
-  background-color: #8f2e2e;
-}
-
-
-/* estados */
-
-.estado {
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  color: white;
-}
-
-.estado.entregado {
-  background-color: var(--stog-accent);
-}
-
-.estado.transito {
-  background-color: var(--stog-muted);
-}
-
-.estado.pendiente {
-  background-color: #b0763f;
-}
-
-
-/* =========================================
-   RESPONSIVE - TABLET
-   ========================================= */
-
-@media (max-width: 992px) {
-
-  .admin-layout {
-    flex-direction: column;
-  }
-
-  .admin-sidebar {
-    width: 100%;
-    min-height: auto;
-  }
-
-  .admin-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .admin-nav .salir {
-    margin-top: 0;
-  }
-
-  .admin-main {
-    padding: 24px;
-  }
-
-  .admin-tabla {
-    min-width: 700px;
-  }
-
-  .admin-toolbar {
-    display: flex;
-    justify-content: flex-start;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .admin-toolbar > * {
-    width: auto;
-    grid-column: auto;
-    justify-self: auto;
-  }
-}
-
-
-/* =========================================
-   RESPONSIVE - CELULAR
-   ========================================= */
-
-@media (max-width: 576px) {
-
-  .admin-main {
-    padding: 6px;
-  }
-
-  
-  .admin-topbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .admin-resumen {
-    grid-template-columns: 1fr; /* Fuerza 2 columnas simétricas */
-    gap: 12px;
-  }
-
-  .admin-tarjeta {
-    padding: 12px 10px;
-  }
-
-  .admin-tarjeta {
-    min-width: 0;
-}
-
-  .admin-tarjeta .numero {
-    font-size: 1.5rem; /* Reduce un poco el tamaño del número para evitar recortes */
-  }
-
-  .admin-tarjeta .etiqueta {
-    font-size: 0.8rem;
-  }
-
-  .admin-usuario {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .admin-nav {
-    flex-direction: column;
-  }
-
-  .admin-nav a {
-    width: 100%;
-  }
-
-  .admin-toolbar {
-    display: flex;
-    width: 100%;
-    margin: 0 0 12px 0;
-  }
-
-  .admin-toolbar > * {
-    width: 100%;
-  }
-
-  .admin-panel {
-    padding: 4px;
-  }
-
-  .admin-tabla {
-    min-width: 700px;
-  }
-.admin-tabla thead {
-    display: none;
-}
-
-.admin-tabla, .admin-tabla tbody, .admin-tabla tr, .admin-tabla td {
-    display: block;
-    width: 100%;
-}
-
-.admin-tabla {
-    min-width: 0;
-    border: none;
-}
-
-.admin-tabla tr {
-    margin-bottom: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-.admin-tabla td {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    padding: 10px 12px;
-    border: none;
-    border-bottom: 1px solid #eee;
-}
-
-.admin-tabla td:last-child {
-  border-bottom: none;
-}
-
-.admin-tabla td::before {
-  content: attr(data-label);
-  font-weight: bold;
-  color: var(--stog-dark);
-  font-size: 0.8rem;
-  margin-bottom: 3px;
-}
-  
-}
-  
-
 
 /* =========================================
    STOG - identidad de la tienda
@@ -871,7 +352,6 @@ a:hover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
-  max-width: 20rem;
 }
 
 .card-juego:hover {
@@ -939,14 +419,6 @@ a:hover {
   font-size: 0.9rem;
 }
 
-.rejilla-juegos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 24px;
-  justify-items: center;
-  margin: 24px 0;
-}
-
 /* Detalle de producto */
 .detalle-juego .imagen-detalle {
   width: 100%;
@@ -1009,21 +481,167 @@ footer.footer-stog hr {
   border-color: #495057;
 }
 
-/* Blogs / Nosotros / Contacto */
-.tarjeta-info {
+
+
+
+/* =========================================
+   Carrusel de la portada
+   ========================================= */
+
+.carrusel-stog img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.carrusel-stog .carousel-caption {
+  background: rgba(17, 24, 39, 0.65);
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+/* =========================================
+   Panel de administración
+   ========================================= */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--stog-fondo);
+}
+
+.admin-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background-color: var(--stog-dark);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.admin-sidebar .logo {
+  color: white;
+  font-weight: 700;
+  font-size: 1.3rem;
+  text-decoration: none;
+  margin-bottom: 24px;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.admin-nav a {
+  color: #d1d5db;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.admin-nav a:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.admin-nav a.activo {
+  background-color: var(--stog-accent);
+  color: var(--stog-dark);
+  font-weight: 600;
+}
+
+.admin-main {
+  flex-grow: 1;
+  min-width: 0;
+  padding: 24px;
+}
+
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-topbar h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--stog-dark);
+  margin: 0;
+}
+
+.admin-panel {
   background: white;
   border-radius: 8px;
-  padding: 24px;
-  height: 100%;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.tarjeta-info h2 {
-  color: var(--stog-dark);
+.admin-panel h2 {
+  font-size: 1.2rem;
   font-weight: 700;
-  font-size: 1.4rem;
+  color: var(--stog-dark);
+  margin: 16px 0 12px 0;
 }
 
-/* Etiquetas de estado de stock en el admin */
+.admin-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-tarjeta {
+  border-radius: 8px;
+  padding: 16px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-tarjeta.azul { background-color: #2563eb; }
+.admin-tarjeta.verde { background-color: var(--stog-accent-dark); }
+.admin-tarjeta.amarilla { background-color: #f5b301; color: var(--stog-dark); }
+
+.admin-tarjeta .etiqueta { font-weight: 600; }
+.admin-tarjeta .numero { font-size: 2rem; font-weight: 700; line-height: 1.2; }
+
+.admin-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.admin-tile {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--stog-dark);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  color: var(--stog-dark);
+}
+
+.admin-tile .icono { font-size: 1.8rem; }
+.admin-tile small { color: var(--stog-muted); }
+
 .stock-critico {
   color: #b3261e;
   font-weight: 700;
@@ -1038,57 +656,28 @@ footer.footer-stog hr {
   text-transform: capitalize;
 }
 
-/* Tarjeta de categoría (vista /categorias) */
-.tarjeta-categoria {
-  display: block;
-  width: 100%;
-  background-color: white;
-  border: 1px solid #dee2e6;
-  border-left: 4px solid var(--stog-accent);
-  border-radius: 8px;
-  padding: 18px 20px;
-  color: var(--stog-texto);
-  text-decoration: none;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.tarjeta-categoria:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
-  color: var(--stog-texto);
-}
-
-.tarjeta-categoria h2 {
-  color: var(--stog-dark);
-}
-
-.tarjeta-categoria small {
-  color: var(--stog-accent-dark);
-  font-weight: 600;
-}
-
-/* Al imprimir la boleta (botón "Imprimir boleta en PDF") se ocultan el menú, el pie y los botones */
-@media print {
-  header,
-  footer,
-  .no-imprimir {
-    display: none !important;
+/* En celulares el menú lateral pasa arriba y ocupa todo el ancho */
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
   }
 
-  body {
-    background-color: white;
+  .admin-sidebar {
+    width: 100%;
+  }
+
+  .admin-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 }
 
-
-/* Al imprimir una boleta desde el admin también se ocultan el menú lateral y la barra superior */
+/* Al imprimir la boleta (Imprimir en PDF) se oculta todo lo que no es la boleta */
 @media print {
   .admin-sidebar,
-  .admin-topbar {
+  header,
+  footer,
+  .d-print-none {
     display: none !important;
-  }
-
-  .admin-main {
-    padding: 0;
   }
 }

@@ -1,69 +1,57 @@
 import { useTienda } from '../context/TiendaContext.jsx'
-import { resumenVentas, ventasPorProducto, inventarioPorCategoria, usuariosPorRol } from '../js/reportes.js'
 import { pesos } from '../js/formato.js'
 
-// Reportes de ventas, inventario y usuarios. Los cálculos están en js/reportes.js;
-// esta pantalla solo los dibuja con los datos del contexto, así que se actualiza sola.
+// Reporte de ventas calculado a partir de las órdenes guardadas
 function AdminReportes() {
-  const { ordenes, productos, usuarios } = useTienda()
+  const { ordenes } = useTienda()
 
-  const resumen = resumenVentas(ordenes)
-  const ventas = ventasPorProducto(ordenes)
-  const inventario = inventarioPorCategoria(productos)
-  const roles = usuariosPorRol(usuarios)
+  let totalVendido = 0
+  let unidadesVendidas = 0
+  // Objeto donde cada clave es el id de un juego y el valor es su resumen de ventas
+  const ventasPorJuego = {}
+
+  // Se recorren todas las órdenes y, dentro de cada una, todos sus juegos
+  ordenes.forEach((orden) => {
+    totalVendido += orden.total
+    orden.items.forEach((item) => {
+      unidadesVendidas += item.cantidad
+      if (!ventasPorJuego[item.id]) {
+        ventasPorJuego[item.id] = { nombre: item.nombre, unidades: 0, total: 0 }
+      }
+      ventasPorJuego[item.id].unidades += item.cantidad
+      ventasPorJuego[item.id].total += item.precio * item.cantidad
+    })
+  })
+
+  // Se ordena de mayor a menor venta
+  const filas = Object.values(ventasPorJuego).sort((a, b) => b.total - a.total)
 
   return (
     <>
-      <div className="admin-topbar"><h1>Reportes</h1></div>
+      <div className="admin-topbar"><h1>Reportes de ventas</h1></div>
 
-      <div className="admin-resumen">
-        <div className="admin-tarjeta"><span className="numero">{pesos(resumen.totalVendido)}</span><span className="etiqueta">Total vendido</span></div>
-        <div className="admin-tarjeta"><span className="numero">{resumen.cantidadOrdenes}</span><span className="etiqueta">Órdenes</span></div>
-        <div className="admin-tarjeta"><span className="numero">{resumen.unidadesVendidas}</span><span className="etiqueta">Juegos vendidos</span></div>
-        <div className="admin-tarjeta"><span className="numero">{pesos(resumen.ticketPromedio)}</span><span className="etiqueta">Ticket promedio</span></div>
-      </div>
+      <section className="admin-resumen">
+        <div className="admin-tarjeta azul"><span className="etiqueta">Órdenes</span><span className="numero">{ordenes.length}</span></div>
+        <div className="admin-tarjeta verde"><span className="etiqueta">Unidades vendidas</span><span className="numero">{unidadesVendidas}</span></div>
+        <div className="admin-tarjeta amarilla"><span className="etiqueta">Total vendido</span><span className="numero fs-3">{pesos(totalVendido)}</span></div>
+      </section>
 
-      <section className="admin-panel mb-3">
-        <h2>Ventas por juego</h2>
-        {ventas.length === 0 ? (
-          <p className="mb-0">Todavía no hay ventas registradas.</p>
+      <section className="admin-panel">
+        <h2>Ventas por videojuego</h2>
+        {filas.length === 0 ? (
+          <p className="text-muted mb-0">Aún no hay ventas para reportar.</p>
         ) : (
           <div className="tabla-scroll">
             <table className="tabla-stog">
-              <thead><tr><th>Juego</th><th>Unidades vendidas</th><th>Ingresos</th></tr></thead>
+              <thead><tr><th>Juego</th><th>Unidades</th><th>Total vendido</th></tr></thead>
               <tbody>
-                {ventas.map((v) => (
-                  <tr key={v.id}><td>{v.nombre}</td><td>{v.unidades}</td><td>{pesos(v.ingresos)}</td></tr>
+                {filas.map((f) => (
+                  <tr key={f.nombre}><td>{f.nombre}</td><td>{f.unidades}</td><td>{pesos(f.total)}</td></tr>
                 ))}
               </tbody>
             </table>
           </div>
         )}
-      </section>
-
-      <section className="admin-panel mb-3">
-        <h2>Inventario por categoría</h2>
-        <div className="tabla-scroll">
-          <table className="tabla-stog">
-            <thead><tr><th>Categoría</th><th>Productos</th><th>Unidades en stock</th><th>Valor del inventario</th></tr></thead>
-            <tbody>
-              {inventario.map((c) => (
-                <tr key={c.categoria}>
-                  <td>{c.categoria}</td><td>{c.productos}</td><td>{c.unidades}</td><td>{pesos(c.valor)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section className="admin-panel">
-        <h2>Usuarios por rol</h2>
-        <div className="d-flex flex-wrap gap-3">
-          {Object.entries(roles).map(([rol, cantidad]) => (
-            <span key={rol}><span className="badge-rol">{rol}</span> {cantidad}</span>
-          ))}
-        </div>
       </section>
     </>
   )

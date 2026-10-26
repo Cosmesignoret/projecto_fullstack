@@ -1,5 +1,9 @@
-
-import { validarCorreo, validarContrasena, validarNombre, validarEdad } from '../src/js/validaciones.js'
+// Pruebas de las funciones de validación de los formularios (src/js/validaciones.js).
+// Son funciones puras: reciben un dato y devuelven un mensaje de error, o '' si está bien.
+import {
+  validarCorreo, validarCorreoAdmitido, validarContrasena, validarNombre, validarEdad,
+  validarRun, validarDireccion, validarProducto
+} from '../src/js/validaciones.js'
 import { pesos, porcentajeDescuento, urlImagen } from '../src/js/formato.js'
 
 describe('validaciones - cuenta de usuario', () => {
@@ -31,6 +35,52 @@ describe('validaciones - cuenta de usuario', () => {
     expect(validarEdad('101')).not.toBe('')
     expect(validarEdad('18')).toBe('')
     expect(validarEdad('45')).toBe('')
+  })
+})
+
+describe('validaciones - panel de administración', () => {
+  it('validarCorreoAdmitido solo acepta duoc.cl, profesor.duoc.cl y gmail.com', () => {
+    expect(validarCorreoAdmitido('juan@duoc.cl')).toBe('')
+    expect(validarCorreoAdmitido('juan@profesor.duoc.cl')).toBe('')
+    expect(validarCorreoAdmitido('juan@gmail.com')).toBe('')
+    expect(validarCorreoAdmitido('juan@hotmail.com')).not.toBe('')
+  })
+
+  it('validarRun comprueba el dígito verificador', () => {
+    expect(validarRun('190110222')).toBe('')
+    expect(validarRun('18456789K')).toBe('')
+    expect(validarRun('18456789k')).toBe('') // la K minúscula también vale
+    expect(validarRun('190110221')).not.toBe('') // dígito verificador incorrecto
+    expect(validarRun('')).not.toBe('')
+    expect(validarRun('123')).not.toBe('')
+  })
+
+  it('validarDireccion exige calle, región y comuna', () => {
+    const buena = { calle: 'Av. Siempre Viva 742', region: 'Región Metropolitana de Santiago', comuna: 'Santiago' }
+
+    expect(validarDireccion(buena)).toBe('')
+    expect(validarDireccion({ ...buena, calle: '' })).not.toBe('')
+    expect(validarDireccion({ ...buena, region: '' })).not.toBe('')
+    expect(validarDireccion({ ...buena, comuna: '' })).not.toBe('')
+  })
+
+  const producto = {
+    codigo: 'PRD-010', categoria: 'Acción', nombre: 'Juego', precio: 10000, stock: 5,
+    stockCritico: 2, descripcion: 'Una descripción', enOferta: false, precioOferta: 0
+  }
+
+  it('validarProducto acepta un producto correcto y rechaza datos inválidos', () => {
+    expect(validarProducto(producto)).toBe('')
+    expect(validarProducto({ ...producto, codigo: 'AB' })).not.toBe('')
+    expect(validarProducto({ ...producto, precio: 0 })).not.toBe('')
+    expect(validarProducto({ ...producto, stock: -1 })).not.toBe('')
+    expect(validarProducto({ ...producto, categoria: '' })).not.toBe('')
+  })
+
+  it('si el producto está en oferta, el precio de oferta debe ser menor al normal', () => {
+    expect(validarProducto({ ...producto, enOferta: true, precioOferta: 8000 })).toBe('')
+    expect(validarProducto({ ...producto, enOferta: true, precioOferta: 10000 })).not.toBe('')
+    expect(validarProducto({ ...producto, enOferta: true, precioOferta: '' })).not.toBe('')
   })
 })
 

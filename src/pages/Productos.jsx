@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import ListaJuegos from '../components/ListaJuegos.jsx'
 import { useTienda } from '../context/TiendaContext.jsx'
 
@@ -7,8 +7,10 @@ const limpiar = (texto) => texto.normalize('NFD').replace(/[\u0300-\u036f]/g, ''
 
 function Productos() {
   const { productos } = useTienda()
-  // Lo que el usuario escribe en el buscador
-  const [busqueda, setBusqueda] = useState('')
+  // El texto del buscador vive en la URL (?buscar=...): así el buscador del header y el de esta
+  // página usan lo mismo, y la búsqueda se puede compartir como enlace.
+  const [parametros, setParametros] = useSearchParams()
+  const busqueda = parametros.get('buscar') || ''
 
   const filtrados = productos.filter((producto) => limpiar(producto.nombre).includes(limpiar(busqueda)))
 
@@ -25,7 +27,7 @@ function Productos() {
             placeholder="Buscar producto..."
             aria-label="Buscar producto"
             value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
+            onChange={(e) => setParametros(e.target.value ? { buscar: e.target.value } : {})}
           />
         </div>
       </section>

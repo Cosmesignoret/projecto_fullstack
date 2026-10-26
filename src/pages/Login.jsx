@@ -32,7 +32,8 @@ function Login() {
       return
     }
 
-    navigate('/')
+    // El administrador y el vendedor van al panel; el cliente vuelve a la tienda
+    navigate(usuario.rol === 'cliente' ? '/' : '/admin')
   }
 
   return (
@@ -81,15 +82,16 @@ function Login() {
 
       <section className="formulario mt-3">
         <h2>Cuentas de prueba</h2>
-        <p>Usa estas cuentas para probar el inicio de sesión (o crea la tuya en «Registrar usuario»).</p>
+        <p>Usa estas cuentas para revisar la tienda y el panel de administración.</p>
         <div className="tabla-scroll">
           <table className="tabla-stog">
             <thead>
-              <tr><th>Correo</th><th>Contraseña</th></tr>
+              <tr><th>Perfil</th><th>Correo</th><th>Contraseña</th></tr>
             </thead>
             <tbody>
-              <tr><td>carlos.edut@gmail.com</td><td>cliente123</td></tr>
-              <tr><td>jperez@duoc.cl</td><td>juan123</td></tr>
+              <tr><td>Administrador</td><td>jperez@duoc.cl</td><td>admin123</td></tr>
+              <tr><td>Vendedor</td><td>erwin.aguileras@profesor.duoc.cl</td><td>vendedor123</td></tr>
+              <tr><td>Cliente</td><td>carlos.edut@gmail.com</td><td>cliente123</td></tr>
             </tbody>
           </table>
         </div>
