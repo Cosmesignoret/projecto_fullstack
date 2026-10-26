@@ -102,3 +102,8 @@ describe('formato', () => {
     expect(urlImagen('')).toBe('')
   })
 })
+
+
+export function validarEntero(valor) {
+  return Number.isInteger(Number(valor));
+}

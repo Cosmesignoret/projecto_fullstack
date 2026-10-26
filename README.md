@@ -18,18 +18,14 @@ Están definidos como variables CSS al inicio de `src/css/estilos.css` (`--stog-
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
-npm run build      # genera la carpeta dist/
+npm run dev                         # http://localhost:5173
+npm run build                       # genera la carpeta dist/
 npm run lint
-npm test           # Karma + Jasmine (necesita un navegador basado en Chromium)
+npm install --save-dev puppeteer    # intalacion de puppeter para cualquier navegador
+npm test                            # Karma + Jasmine
 ```
 
-Si Karma no encuentra Chrome (por ejemplo, usas Brave o Edge), indica la ruta antes de ejecutar:
 
-```bat
-set CHROME_BIN=C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe
-npm test
-```
 
 La app usa `HashRouter` (URLs como `/#/productos`) y rutas relativas (`base: './'`), así que la carpeta `dist/` funciona en cualquier hosting estático, incluido GitHub Pages.
 
